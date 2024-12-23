@@ -3,6 +3,7 @@ import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Flatten, Input
 from tensorflow.keras.datasets import mnist
+import matplotlib.pyplot as plt
 
 # Load and preprocess MNIST dataset
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
@@ -21,9 +22,21 @@ model = Sequential([
 
 # Compile and train the model
 model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
-model.fit(x_train, y_train, epochs=10, batch_size=32, validation_split=0.2)
+history=model.fit(x_train, y_train, epochs=10, batch_size=32, validation_split=0.2)
 print("\n Training complete! \n")
 # Evaluate the model
 loss, accuracy = model.evaluate(x_test, y_test)
 print(f"Test Loss: {loss:.4f}")
 print(f"Test Accuracy: {accuracy:.4f}")
+
+
+# Plot accuracy
+plt.figure(figsize=(10, 6))
+plt.plot(history.history['accuracy'], label='Training Accuracy')
+plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
+plt.title('Model Accuracy')
+plt.xlabel('Epochs')
+plt.ylabel('Accuracy')
+plt.legend()
+plt.grid(True)
+plt.show()
